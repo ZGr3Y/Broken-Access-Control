@@ -74,24 +74,7 @@ La vulnerabilità permette a un utente standard di accedere ai dati personali di
 2. Intercetta la richiesta a `/api/users/2/data`
 3. Modifica l'ID nella richiesta (es. da 2 a 1 per accedere ai dati dell'admin)
 
-### Fix Implementato
-```javascript
-// Endpoint con fix IDOR
-app.get('/api/users/:userId/data', authenticate, (req, res) => {
-    const requestedId = parseInt(req.params.userId);
-    
-    if (req.user.id === requestedId || req.user.role === 'admin') {
-        const user = users.find(u => u.id === requestedId);
-        if (user) {
-            res.json({ personalData: user.personalData });
-        } else {
-            res.status(404).json({ message: 'Utente non trovato' });
-        }
-    } else {
-        res.status(403).json({ message: 'Non autorizzato' });
-    }
-});
-```
+
 
 ## 📁 Struttura del Progetto
 
