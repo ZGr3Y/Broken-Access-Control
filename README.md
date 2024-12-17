@@ -93,13 +93,14 @@ How to Reproduce:
 
 ## 📁 Project Structure
 ```
-broken-access-control-demo/
-├── public/
-│   ├── index.html
-│   ├── script.js
-│   └── style.css
-├── server.js
-├── package.json
+Broken-Access-Control/
+├── Vulnerable_system/
+│   ├── public/
+│   │   ├── index.html
+│   │   ├── script.js
+│   │   └── style.css
+│   └── server.js
+├── LICENSE
 └── README.md
 ```
 
