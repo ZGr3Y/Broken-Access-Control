@@ -1,50 +1,50 @@
 # IDOR, JWT, and MITM Vulnerabilities Demo
 
-Questa è un'applicazione dimostrativa creata per illustrare diverse vulnerabilità di sicurezza comuni:
+This is a demonstration application created to illustrate several common security vulnerabilities:
 - Broken Access Control (IDOR - Insecure Direct Object Reference)
-- Manipolazione del token JWT
-- Attacchi Man-in-the-Middle (MITM)
+- JWT Token Manipulation
+- Man-in-the-Middle (MITM) Attacks
 
-Il progetto è stato sviluppato esclusivamente per scopi educativi e di ricerca.
+This project has been developed exclusively for educational and research purposes.
 
 ## ⚠️ Disclaimer
-Questo progetto contiene **vulnerabilità di sicurezza intenzionali** ed è stato creato solo per scopi dimostrativi ed educativi. Non utilizzare in produzione o in ambienti reali.
+This project contains **intentional security vulnerabilities** and was created for demonstration and educational purposes only. Do not use in production or real environments.
 
-## 📝 Descrizione
-L'applicazione simula un sistema di gestione utenti con dati sensibili (informazioni bancarie e fiscali). Include:
-* Sistema di autenticazione vulnerabile con JWT
-* Pannello admin per la gestione utenti
-* API per accedere ai dati personali
-* Multiple vulnerabilità dimostrative
+## 📝 Description
+The application simulates a user management system with sensitive data (banking and fiscal information). It includes:
+* Vulnerable JWT authentication system
+* Admin panel for user management
+* API for accessing personal data
+* Multiple demonstration vulnerabilities
 
-## 🔧 Tecnologie Utilizzate
+## 🔧 Technologies Used
 * Node.js
 * Express.js
 * JWT (JSON Web Tokens)
 * HTML/CSS/JavaScript (Frontend)
 
-## 🚀 Installazione
+## 🚀 Installation
 ```bash
-# Clona il repository
+# Clone the repository
 git clone https://github.com/[your-username]/security-vulnerabilities-demo
 
-# Installa le dipendenze
+# Install dependencies
 cd security-vulnerabilities-demo
 npm install
 
-# Avvia il server
+# Start the server
 node server.js
 ```
 
-L'applicazione sarà disponibile su `http://localhost:3000`
+The application will be available at `http://localhost:3000`
 
-## 👥 Utenti Demo
+## 👥 Demo Users
 ```
 Admin:
 - Username: giampaolo
 - Password: adminpass
 
-Utenti Standard:
+Standard Users:
 - Username: paolo
 - Password: password1
 - Username: sergio
@@ -52,45 +52,45 @@ Utenti Standard:
 ```
 
 ## 🔒 Access Control Matrix
-Soggetto/Oggetto | Propri Dati Personali | Dati Personali Altri Utenti | Lista Utenti | Eliminazione Utenti | Admin Panel
------------------|----------------------|---------------------------|--------------|-------------------|-------------
-Admin            | R                    | R                         | R            | D                 | R
-Utente Standard  | R                    | X                         | X            | X                 | X
-Non Autenticato  | X                    | X                         | X            | X                 | X
+Subject/Object | Own Personal Data | Others' Personal Data | User List | User Deletion | Admin Panel
+---------------|------------------|---------------------|-----------|---------------|-------------
+Admin          | R                | R                   | R         | D             | R
+Standard User  | R                | X                   | X         | X             | X
+Unauthenticated| X                | X                   | X         | X             | X
 
-Legenda:
-* R: Read (Lettura)
-* D: Delete (Eliminazione)
-* X: Nessun accesso
+Legend:
+* R: Read
+* D: Delete
+* X: No access
 
-## 🔍 Vulnerabilità Presenti
+## 🔍 Present Vulnerabilities
 
 ### 1. IDOR (Insecure Direct Object Reference)
-La vulnerabilità permette a un utente standard di accedere ai dati personali di altri utenti modificando l'ID nella richiesta API.
+This vulnerability allows a standard user to access personal data of other users by modifying the ID in the API request.
 
-Come Riprodurre:
-1. Login come utente standard (es. paolo/password1)
-2. Intercetta la richiesta a `/api/users/2/data`
-3. Modifica l'ID nella richiesta (es. da 2 a 1 per accedere ai dati dell'admin)
+How to Reproduce:
+1. Login as a standard user (e.g., paolo/password1)
+2. Intercept the request to `/api/users/2/data`
+3. Modify the ID in the request (e.g., from 2 to 1 to access admin's data)
 
-### 2. Manipolazione del Token JWT
-L'implementazione JWT presenta vulnerabilità che permettono la manipolazione del token.
+### 2. JWT Token Manipulation
+The JWT implementation has vulnerabilities that allow token manipulation.
 
-Come Riprodurre:
-1. Effettua il login e ottieni il token JWT
-2. Decodifica il payload del token (puoi usare jwt.io)
-3. Modifica il campo 'role' da 'standard' a 'admin'
-4. Il server accetterà il token manipolato per via della mancata verifica
+How to Reproduce:
+1. Login and obtain the JWT token
+2. Decode the token payload (you can use jwt.io)
+3. Modify the 'role' field from 'standard' to 'admin'
+4. The server will accept the manipulated token due to lack of verification
 
 ### 3. Man-in-the-Middle (MITM)
-L'applicazione è vulnerabile agli attacchi MITM a causa della mancanza di HTTPS.
+The application is vulnerable to MITM attacks due to lack of HTTPS.
 
-Come Riprodurre:
-1. Utilizza uno strumento di intercettazione del traffico (es. Wireshark)
-2. Monitora il traffico HTTP tra client e server
-3. I token JWT e i dati sensibili sono visibili in chiaro
+How to Reproduce:
+1. Use a traffic interception tool (e.g., Wireshark)
+2. Monitor HTTP traffic between client and server
+3. JWT tokens and sensitive data are visible in plain text
 
-## 📁 Struttura del Progetto
+## 📁 Project Structure
 ```
 security-vulnerabilities-demo/
 ├── public/
@@ -102,32 +102,32 @@ security-vulnerabilities-demo/
 └── README.md
 ```
 
-## 🛡️ Best Practices di Sicurezza
-Per proteggere un'applicazione da queste vulnerabilità:
+## 🛡️ Security Best Practices
+To protect an application from these vulnerabilities:
 
-1. Protezione da IDOR:
-   * Implementare controlli di autorizzazione rigorosi
-   * Verificare sempre la proprietà delle risorse
-   * Utilizzare identificatori indiretti o UUID
-   * Implementare il principio del minimo privilegio
+1. IDOR Protection:
+   * Implement rigorous authorization controls
+   * Always verify resource ownership
+   * Use indirect identifiers or UUIDs
+   * Implement the principle of least privilege
 
-2. Protezione JWT:
-   * Utilizzare una chiave segreta forte
-   * Implementare la verifica del token
-   * Utilizzare una whitelist di token validi
-   * Implementare la rotazione dei token
+2. JWT Protection:
+   * Use a strong secret key
+   * Implement token verification
+   * Use a whitelist of valid tokens
+   * Implement token rotation
 
-3. Protezione da MITM:
-   * Implementare HTTPS/TLS
-   * Utilizzare HSTS
-   * Implementare il pinning dei certificati
-   * Monitorare e validare i certificati
+3. MITM Protection:
+   * Implement HTTPS/TLS
+   * Use HSTS
+   * Implement certificate pinning
+   * Monitor and validate certificates
 
-## 👥 Contribuire
-Questo è un progetto dimostrativo, ma suggerimenti e miglioramenti sono benvenuti attraverso issues e pull requests.
+## 👥 Contributing
+This is a demonstration project, but suggestions and improvements are welcome through issues and pull requests.
 
-## 📄 Licenza
-MIT License
+## 📄 License
+GPL License
 
-## ✍️ Autore
+## ✍️ Author
 Paolo Maria Scarlata
