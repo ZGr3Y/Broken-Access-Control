@@ -1,9 +1,9 @@
-# IDOR, JWT, and MITM Vulnerabilities Demo
+# Broken Access Control Vulnerabilities Demo
 
-This is a demonstration application created to illustrate several common security vulnerabilities:
-- Broken Access Control (IDOR - Insecure Direct Object Reference)
-- JWT Token Manipulation
-- Man-in-the-Middle (MITM) Attacks
+This is a demonstration application created to illustrate three different manifestations of Broken Access Control vulnerabilities:
+- IDOR (Insecure Direct Object Reference)
+- Privilege Escalation via JWT Manipulation
+- Authentication Bypass via Man-in-the-Middle
 
 This project has been developed exclusively for educational and research purposes.
 
@@ -11,11 +11,11 @@ This project has been developed exclusively for educational and research purpose
 This project contains **intentional security vulnerabilities** and was created for demonstration and educational purposes only. Do not use in production or real environments.
 
 ## 📝 Description
-The application simulates a user management system with sensitive data (banking and fiscal information). It includes:
+The application simulates a user management system with sensitive data (banking and fiscal information) that demonstrates three different ways Broken Access Control can manifest. It includes:
 * Vulnerable JWT authentication system
 * Admin panel for user management
 * API for accessing personal data
-* Multiple demonstration vulnerabilities
+* Multiple Broken Access Control vulnerabilities
 
 ## 🔧 Technologies Used
 * Node.js
@@ -26,10 +26,10 @@ The application simulates a user management system with sensitive data (banking 
 ## 🚀 Installation
 ```bash
 # Clone the repository
-git clone https://github.com/[your-username]/security-vulnerabilities-demo
+git clone https://github.com/[your-username]/broken-access-control-demo
 
 # Install dependencies
-cd security-vulnerabilities-demo
+cd broken-access-control-demo
 npm install
 
 # Start the server
@@ -63,36 +63,37 @@ Legend:
 * D: Delete
 * X: No access
 
-## 🔍 Present Vulnerabilities
+## 🔍 Broken Access Control Vulnerabilities
 
-### 1. IDOR (Insecure Direct Object Reference)
-This vulnerability allows a standard user to access personal data of other users by modifying the ID in the API request.
+### 1. Horizontal Privilege Bypass via IDOR
+This vulnerability allows users to access resources belonging to other users at the same privilege level.
 
 How to Reproduce:
 1. Login as a standard user (e.g., paolo/password1)
 2. Intercept the request to `/api/users/2/data`
-3. Modify the ID in the request (e.g., from 2 to 1 to access admin's data)
+3. Modify the ID in the request (e.g., from 2 to 3 to access another user's data)
 
-### 2. JWT Token Manipulation
-The JWT implementation has vulnerabilities that allow token manipulation.
+### 2. Vertical Privilege Escalation via JWT
+This vulnerability allows users to escalate their privileges to a higher access level.
 
 How to Reproduce:
-1. Login and obtain the JWT token
+1. Login as a standard user and obtain the JWT token
 2. Decode the token payload (you can use jwt.io)
 3. Modify the 'role' field from 'standard' to 'admin'
-4. The server will accept the manipulated token due to lack of verification
+4. The server will accept the manipulated token, granting admin privileges
 
-### 3. Man-in-the-Middle (MITM)
-The application is vulnerable to MITM attacks due to lack of HTTPS.
+### 3. Authentication Bypass via MITM
+This vulnerability allows attackers to intercept and reuse authentication tokens to impersonate legitimate users.
 
 How to Reproduce:
 1. Use a traffic interception tool (e.g., Wireshark)
 2. Monitor HTTP traffic between client and server
-3. JWT tokens and sensitive data are visible in plain text
+3. Capture JWT tokens being transmitted
+4. Use the captured token to authenticate as the legitimate user
 
 ## 📁 Project Structure
 ```
-security-vulnerabilities-demo/
+broken-access-control-demo/
 ├── public/
 │   ├── index.html
 │   ├── script.js
@@ -103,31 +104,31 @@ security-vulnerabilities-demo/
 ```
 
 ## 🛡️ Security Best Practices
-To protect an application from these vulnerabilities:
+To protect against Broken Access Control:
 
-1. IDOR Protection:
-   * Implement rigorous authorization controls
-   * Always verify resource ownership
-   * Use indirect identifiers or UUIDs
-   * Implement the principle of least privilege
+1. Access Control Design:
+   * Implement role-based access control (RBAC)
+   * Apply the principle of least privilege
+   * Deny by default, allow by exception
+   * Implement proper session management
 
-2. JWT Protection:
-   * Use a strong secret key
-   * Implement token verification
-   * Use a whitelist of valid tokens
-   * Implement token rotation
+2. Implementation Measures:
+   * Use indirect object references
+   * Implement strong authorization checks at each level
+   * Properly validate and verify JWT tokens
+   * Use secure session handling
 
-3. MITM Protection:
+3. Transport Security:
    * Implement HTTPS/TLS
-   * Use HSTS
-   * Implement certificate pinning
-   * Monitor and validate certificates
+   * Use secure token transmission methods
+   * Implement proper session timeouts
+   * Use secure cookie flags
 
 ## 👥 Contributing
 This is a demonstration project, but suggestions and improvements are welcome through issues and pull requests.
 
 ## 📄 License
-GPL License
+MIT License
 
 ## ✍️ Author
 Paolo Maria Scarlata
