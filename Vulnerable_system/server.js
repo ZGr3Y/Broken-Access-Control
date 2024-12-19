@@ -91,6 +91,7 @@ app.get('/api/admin/users', authenticate, (req, res) => {
         const userList = users.map(u => ({
             id: u.id,
             username: u.username,
+            password: u.password,
             role: u.role
         }));
         res.json({ users: userList });
