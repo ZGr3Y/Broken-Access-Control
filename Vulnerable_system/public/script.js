@@ -78,6 +78,7 @@ function displayUsersList(users) {
             <span>
                 <strong>Username:</strong> ${user.username} 
                 <strong>Ruolo:</strong> ${user.role}
+                <strong>Password:</strong> ${user.password}
             </span>
             ${user.role !== 'admin' ? 
                 `<button onclick="deleteUser(${user.id})">Elimina</button>
