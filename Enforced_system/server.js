@@ -7,9 +7,15 @@ const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 
 const app = express();
-const HTTPS_PORT = 443;  // Standard HTTPS port
-const HTTP_PORT = 80;    // Standard HTTP port
+const HTTPS_PORT = 443;
+const HTTP_PORT = 80;
 const HOST = '0.0.0.0';
+
+// Rate limiting configuration
+const loginAttempts = new Map();
+const MAX_ATTEMPTS = 5;
+const LOCK_TIME = 15 * 60 * 1000; // 15 minutes
+const ATTEMPT_RESET_TIME = 60 * 60 * 1000; // 1 hour
 
 // SSL configuration
 const credentials = {
@@ -41,16 +47,7 @@ function decrypt(text) {
     return decrypted;
 }
 
-app.use(express.json());
-app.use(express.static('public'));
-
-// Create HTTP app for redirecting to HTTPS
-const httpApp = express();
-httpApp.get('*', (req, res) => {
-    res.redirect('https://' + req.headers.host + req.url);
-});
-
-// Users array with hashed passwords and encrypted data
+// Users array with hashed passwords
 let users = [
     { 
         id: 1, 
@@ -87,17 +84,77 @@ let users = [
     }
 ];
 
+app.use(express.json());
+app.use(express.static('public'));
+
+function checkLoginAttempts(username, ip) {
+    const key = `${username}-${ip}`;
+    const attempts = loginAttempts.get(key) || { count: 0, firstAttempt: Date.now(), locked: false };
+    
+    if (Date.now() - attempts.firstAttempt > ATTEMPT_RESET_TIME) {
+        attempts.count = 0;
+        attempts.firstAttempt = Date.now();
+        attempts.locked = false;
+    }
+    
+    if (attempts.locked) {
+        if (Date.now() - attempts.lockTime < LOCK_TIME) {
+            const remainingTime = Math.ceil((LOCK_TIME - (Date.now() - attempts.lockTime)) / 1000 / 60);
+            return {
+                allowed: false,
+                message: `Account temporarily locked. Try again in ${remainingTime} minutes.`
+            };
+        } else {
+            attempts.locked = false;
+            attempts.count = 0;
+        }
+    }
+    
+    if (attempts.count >= MAX_ATTEMPTS) {
+        attempts.locked = true;
+        attempts.lockTime = Date.now();
+        loginAttempts.set(key, attempts);
+        return {
+            allowed: false,
+            message: 'Too many failed attempts. Account locked for 15 minutes.'
+        };
+    }
+    
+    return { allowed: true };
+}
+
+function updateLoginAttempts(username, ip, success) {
+    const key = `${username}-${ip}`;
+    const attempts = loginAttempts.get(key) || { count: 0, firstAttempt: Date.now() };
+    
+    if (success) {
+        loginAttempts.delete(key);
+    } else {
+        attempts.count++;
+        loginAttempts.set(key, attempts);
+    }
+}
+
 app.post('/login', async (req, res) => {
     const { username, password } = req.body;
-    const user = users.find(u => u.username === username);
+    const ip = req.ip;
+    
+    const rateCheck = checkLoginAttempts(username, ip);
+    if (!rateCheck.allowed) {
+        return res.status(429).json({ message: rateCheck.message });
+    }
 
+    const user = users.find(u => u.username === username);
+    
     if (!user) {
+        updateLoginAttempts(username, ip, false);
         return res.status(401).json({ message: 'Credenziali non valide' });
     }
 
     const validPassword = await bcrypt.compare(password, user.password);
     
     if (validPassword) {
+        updateLoginAttempts(username, ip, true);
         const token = jwt.sign({ 
             id: user.id,
             username: user.username, 
@@ -105,6 +162,7 @@ app.post('/login', async (req, res) => {
         }, JWT_SECRET, { expiresIn: '1h' });
         res.json({ token });
     } else {
+        updateLoginAttempts(username, ip, false);
         res.status(401).json({ message: 'Credenziali non valide' });
     }
 });
@@ -151,12 +209,12 @@ app.get('/api/users/:userId/data', authenticate, (req, res) => {
 
 app.get('/api/admin/users', authenticate, (req, res) => {
     if (req.user.role === 'admin') {
-        const userList = users.map(u => ({
+        const usersList = users.map(u => ({
             id: u.id,
             username: u.username,
             role: u.role
         }));
-        res.json({ users: userList });
+        res.json({ users: usersList });
     } else {
         res.status(403).json({ message: 'Accesso negato' });
     }
@@ -182,13 +240,14 @@ app.delete('/api/admin/users/:userId', authenticate, (req, res) => {
     res.json({ message: 'Utente eliminato con successo' });
 });
 
-// Create HTTPS server
-const httpsServer = https.createServer(credentials, app);
+const httpApp = express();
+httpApp.get('*', (req, res) => {
+    res.redirect('https://' + req.headers.host + req.url);
+});
 
-// Create HTTP server (for redirect only)
+const httpsServer = https.createServer(credentials, app);
 const httpServer = http.createServer(httpApp);
 
-// Start both servers
 httpServer.listen(HTTP_PORT, HOST, () => {
     console.log(`HTTP Server running on http://${HOST}:${HTTP_PORT} (redirecting to HTTPS)`);
 });
