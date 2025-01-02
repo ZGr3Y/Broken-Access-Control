@@ -1,28 +1,27 @@
----
 
+```markdown
 # 🔐 Broken Access Control: Security Vulnerabilities and Mitigations
 
 Welcome to the repository accompanying the project on **Broken Access Control**. This project explores access control vulnerabilities in web applications, including **Insecure Direct Object References (IDOR)** and weak **JWT (JSON Web Token) implementations**, and provides detailed mitigation strategies.
 
 ---
 
-## 📑 Table of Contents
-
-- [📘 About the Project](#about-the-project)
-- [✨ Features](#features)
-- [⚙️ Installation](#installation)
-- [🚀 Usage](#usage)
-- [🔍 Exploitation Demonstrations](#exploitation-demonstrations)
-  - [🔑 JWT Token Vulnerabilities](#jwt-token-vulnerabilities)
-  - [🔗 IDOR Weaknesses](#idor-weaknesses)
-- [🛡️ Security Enhancements](#security-enhancements)
-- [📂 Directory Structure](#directory-structure)
-- [🤝 Contributing](#contributing)
-- [📜 License](#license)
+## Table of Contents
+- [About the Project](#about-the-project)
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Exploitation Demonstrations](#exploitation-demonstrations)
+  - [JWT Token Vulnerabilities](#jwt-token-vulnerabilities)
+  - [IDOR Weaknesses](#idor-weaknesses)
+- [Security Enhancements](#security-enhancements)
+- [Directory Structure](#directory-structure)
+- [Contributing](#contributing)
+- [License](#license)
 
 ---
 
-## 📘 About the Project
+## About the Project
 
 This repository is a companion to a security research project focusing on **Broken Access Control**, a leading cause of web application vulnerabilities as highlighted by the **OWASP Top 10**. The project demonstrates the exploitation of improperly secured systems and presents actionable recommendations to enhance security.
 
@@ -30,7 +29,7 @@ This repository is a companion to a security research project focusing on **Brok
 
 ---
 
-## ✨ Features
+## Features
 
 - Demonstrates key vulnerabilities:
   - Weak JWT token validation and signature implementation.
@@ -43,7 +42,7 @@ This repository is a companion to a security research project focusing on **Brok
 
 ---
 
-## ⚙️ Installation
+## Installation
 
 ### Prerequisites
 - **Node.js**: Make sure Node.js is installed on your system. Download it [here](https://nodejs.org).
@@ -71,7 +70,7 @@ This repository is a companion to a security research project focusing on **Brok
 
 ---
 
-## 🚀 Usage
+## Usage
 
 ### Setting Up the Demonstration Environment
 - Ensure **Burp Suite** is installed for testing and intercepting HTTP requests.
@@ -81,9 +80,10 @@ This repository is a companion to a security research project focusing on **Brok
 
 ---
 
-## 🔍 Exploitation Demonstrations
+## Exploitation Demonstrations
 
-### 🔑 JWT Token Vulnerabilities
+### JWT Token Vulnerabilities
+
 The vulnerable implementation of JWT tokens in this project:
 - Uses an empty secret key for token signing.
 - Does not validate token signatures, allowing easy forgery.
@@ -93,14 +93,15 @@ To exploit:
 2. Modify the token payload using tools like Burp Suite or jwt.io.
 3. Escalate privileges by altering the `role` claim to `admin`.
 
-### 🔗 IDOR Weaknesses
+### IDOR Weaknesses
+
 The IDOR vulnerability allows unauthorized access to sensitive user data:
 1. Authenticate as a standard user.
 2. Modify the `userId` parameter in the URL to access data belonging to other users.
 
 ---
 
-## 🛡️ Security Enhancements
+## Security Enhancements
 
 The repository includes a **secure implementation** of the system, addressing the demonstrated vulnerabilities:
 - Secure JWT signing and verification.
@@ -108,11 +109,14 @@ The repository includes a **secure implementation** of the system, addressing th
 - AES-256 encryption for sensitive data.
 - Rate limiting and session expiration for authentication.
 
-
+To explore the secure implementation, switch to the `secure` branch:
+```bash
+git checkout secure
+```
 
 ---
 
-## 📂 Directory Structure
+## Directory Structure
 
 ```plaintext
 .
@@ -137,7 +141,7 @@ The repository includes a **secure implementation** of the system, addressing th
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! If you’d like to improve this project, feel free to:
 1. Fork the repository.
@@ -146,7 +150,7 @@ Contributions are welcome! If you’d like to improve this project, feel free to
 
 ---
 
-## 📜 License
+## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
