@@ -1,5 +1,3 @@
-
-```markdown
 # 🔐 Broken Access Control: Security Vulnerabilities and Mitigations
 
 Welcome to the repository accompanying the project on **Broken Access Control**. This project explores access control vulnerabilities in web applications, including **Insecure Direct Object References (IDOR)** and weak **JWT (JSON Web Token) implementations**, and provides detailed mitigation strategies.
