@@ -52,7 +52,7 @@ let users = [
     { 
         id: 1, 
         username: 'giampaolo', 
-        password: '$2a$10$RIFCAssVanYeC4uDonP.nOqoHoqssNnOz8Cko2Bb7aIgGTMBAbJYi', // hashed 'adminpass'
+        password: '$2a$10$RIFCAssVanYeC4uDonP.nOqoHoqssNnOz8Cko2Bb7aIgGTMBAbJYi', 
         role: 'admin',
         personalData: {
             creditCard: encrypt("4539-7894-5698-1234"),
@@ -63,7 +63,7 @@ let users = [
     { 
         id: 2, 
         username: 'paolo', 
-        password: '$2a$10$CZdmu1AJhSNrhjK5FYPWEuhF93akdDqBYMcTwPdacPrwx7dRSzdOO', // hashed 'password1'
+        password: '$2a$10$CZdmu1AJhSNrhjK5FYPWEuhF93akdDqBYMcTwPdacPrwx7dRSzdOO', 
         role: 'standard',
         personalData: {
             creditCard: encrypt("4532-1234-5678-9012"),
@@ -74,7 +74,7 @@ let users = [
     { 
         id: 3, 
         username: 'sergio', 
-        password: '$2a$10$zFjpyrXl07yRcnkQMh7ZoeTPmdtuhle4MrT432f92f2.sgQUnimRm', // hashed 'password2'
+        password: '$2a$10$zFjpyrXl07yRcnkQMh7ZoeTPmdtuhle4MrT432f92f2.sgQUnimRm', 
         role: 'standard',
         personalData: {
             creditCard: encrypt("4532-7891-2345-6789"),
