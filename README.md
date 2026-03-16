@@ -1,4 +1,4 @@
-# 🔐 Broken Access Control: Security Vulnerabilities and Mitigations ✨
+# Broken Access Control: Security Vulnerabilities and Mitigations (OWASP 1°) 
 
 Welcome to the repository accompanying the project on **Broken Access Control**. This project explores access control vulnerabilities in web applications, including **Insecure Direct Object References (IDOR)** and weak **JWT (JSON Web Token) implementations**, and provides detailed mitigation strategies.
 
@@ -27,7 +27,7 @@ This repository is a companion to a security research project focusing on **Brok
 
 ---
 
-## ✨ Features
+## Features
 
 - Demonstrates key vulnerabilities:
   - Weak JWT token validation and signature implementation.
@@ -68,7 +68,7 @@ This repository is a companion to a security research project focusing on **Brok
 
 ---
 
-## 🚀 Usage
+## Usage
 
 ### Setting Up the Demonstration Environment
 - Ensure **Burp Suite** is installed for testing and intercepting HTTP requests.
@@ -99,7 +99,7 @@ The IDOR vulnerability allows unauthorized access to sensitive user data:
 
 ---
 
-## 🛡️ Security Enhancements
+## Security Enhancements
 
 The repository includes a **secure implementation** of the system, addressing the demonstrated vulnerabilities:
 - Secure JWT signing and verification.
@@ -139,7 +139,7 @@ git checkout secure
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! If you’d like to improve this project, feel free to:
 1. Fork the repository.
@@ -148,7 +148,7 @@ Contributions are welcome! If you’d like to improve this project, feel free to
 
 ---
 
-## 📜 License
+## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
